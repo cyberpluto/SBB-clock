@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>SBB</title>
+	<style>
+		#myCanvas {
+			border: 1px solid #000;	
+		}
+	</style>
+</head>
+<body>
+	<canvas id="myCanvas" width="300" height="300"></canvas>
+	<script>
+		const c = document.getElementById("myCanvas");
+		const ctx = c.getContext("2d");
+		function drawFrame(){
+			ctx.beginPath();
+			ctx.arc(150,150,100,0,2*Math.PI);
+			ctx.stroke();
+		}
+			
+		// Hours
+		function drawHours(){
+			for(let i=0; i<12; i++){
+				ctx.save();
+				ctx.translate(150,150);
+				ctx.rotate(i*30*Math.PI/180);
+				ctx.fillRect(-3,-95,6,25);
+				ctx.restore();
+			}
+		}
+
+		// Minutes
+		function drawMinutes(){
+			for(let i=0; i<60; i++){
+				ctx.save();
+				ctx.translate(150,150);
+				ctx.rotate(i*6*Math.PI/180);
+				ctx.fillRect(-1,-95,2,10);
+				ctx.restore();
+			}
+		}
+
+		// Seconds arm
+		function drawSecondsArm(second){
+			ctx.save();
+			ctx.translate(150,150);
+			ctx.rotate(second*6*Math.PI/180);
+			ctx.fillStyle = "red";
+			ctx.fillRect(-1, -60, 2, 85);
+			ctx.beginPath();
+			ctx.arc(0, -60, 10, 0, 2*Math.PI);
+			ctx.fill();
+			ctx.restore();
+		}
+
+		// Minutes arm
+		function drawMinutesArm(minute){
+			ctx.save();
+			ctx.translate(150,150);
+			ctx.rotate(minute*6*Math.PI/180);
+			ctx.fillRect(-3, -90, 6, 110);
+			ctx.beginPath();
+			ctx.restore();
+		}
+
+		// Hours arm
+		function drawHoursArm(hour, minute){
+			ctx.save();
+			ctx.translate(150,150);
+			ctx.rotate((hour*30 + minute/2)*Math.PI/180);
+			ctx.fillRect(-4, -60, 8, 80);
+			ctx.beginPath();
+			ctx.restore();
+		}
+
+		function tick(){
+			let second = new Date().getSeconds();
+			let minute = new Date().getMinutes();
+			let hour = new Date().getHours();
+			console.log(second);
+			ctx.clearRect(0, 0, c.width, c.height);
+			drawFrame();
+			drawHours();
+			drawMinutes();
+			drawHoursArm(hour, minute);
+			drawMinutesArm(minute);
+			drawSecondsArm(second);
+		}
+		setInterval(tick, 1000)
+
+	</script>
+</body>
+</html>
